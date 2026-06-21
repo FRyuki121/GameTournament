@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Турнирная Таблица</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">Игровая Таблица</a>
+            <a class="btn btn-outline-light btn-sm" href="{{ url_for('main.add_match') }}">Внести матч</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-warning">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>
