@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card card-body mb-3">
+            <h5>Добавить игрока</h5>
+            <form action="{{ url_for('main.add_player') }}" method="POST">
+                <div class="mb-2">
+                    <input type="text" name="name" class="form-control form-control-sm" placeholder="Имя" required>
+                </div>
+                <div class="mb-2">
+                    <input type="text" name="nickname" class="form-control form-control-sm" placeholder="Никнейм" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm w-100">Добавить</button>
+            </form>
+        </div>
+
+        <div class="card card-body">
+            <h5>Поиск игрока</h5>
+            <form action="{{ url_for('main.index') }}" method="GET" class="d-flex">
+                <input type="text" name="search" class="form-control form-control-sm me-2" placeholder="Никнейм..." value="{{ search_query }}">
+                <button type="submit" class="btn btn-secondary btn-sm">Искать</button>
+            </form>
+            {% if search_query %}
+                <a href="{{ url_for('main.index') }}" class="text-muted mt-2 d-block" style="font-size: 12px;">Сбросить поиск</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-8 mb-4">
+        <div class="card card-body">
+            <h4 class="mb-3">Турнирная таблица</h4>
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Никнейм</th>
+                        <th>Очки (Победы)</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in players %}
+                    <tr>
+                        <td>{{ player.name }}</td>
+                        <td><span class="badge bg-secondary">@{{ player.nickname }}</span></td>
+                        <td><strong>{{ player.points }}</strong></td>
+                        <td>
+                            <form action="{{ url_for('main.delete_player', player_id=player.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Удалить игрока?')">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Игроков пока нет</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card card-body mt-2 mb-5">
+    <h4>История матчей</h4>
+    <ul class="list-group list-group-flush">
+        {% for match in matches %}
+        <li class="list-group-item d-flex justify-content-between align-middle">
+            <div>
+                {{ match.player1.name }} <span class="text-muted">vs</span> {{ match.player2.name }}
+            </div>
+            <div>
+                Победитель: <span class="badge bg-success">{{ match.winner.name }}</span>
+            </div>
+        </li>
+        {% else %}
+        <li class="list-group-item text-center text-muted">Матчей пока не зафиксировано</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
