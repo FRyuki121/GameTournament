@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card card-body">
+            <h4 class="mb-3 text-center">Зафиксировать результат игры</h4>
+            <form action="{{ url_for('main.add_match') }}" method="POST">
+                
+                <div class="mb-3">
+                    <label class="form-label">Игрок 1</label>
+                    <select name="player1" class="form-select" required>
+                        {% for player in players %}
+                            <option value="{{ player.id }}">{{ player.name }} (@{{ player.nickname format }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Игрок 2</label>
+                    <select name="player2" class="form-select" required>
+                        {% for player in players %}
+                            <option value="{{ player.id }}">{{ player.name }} (@{{ player.nickname }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Кто победил?</label>
+                    <select name="winner" class="form-select" required>
+                        {% for player in players %}
+                            <option value="{{ player.id }}">{{ player.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-light">Назад</a>
+                    <button type="submit" class="btn btn-success">Сохранить матч</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
