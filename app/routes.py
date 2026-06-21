@@ -68,8 +68,21 @@ def add_match():
 
 #удаление игрока
 @bp.route('/player/delete/<int:player_id>', methods=['POST'])
-def delete_player():
+def delete_player(player_id):
     player = Player.query.get_or_404(player_id)
     db.session.delete(player)
     db.session.commit()
+    return redirect(url_for('main.index'))
+    
+#очистка матчей и обнуление очков
+@bp.route('/tournament/reset', methods=['POST'])
+def reset_tournament():
+    Match.query.delete()
+    
+    players = Player.query.all()
+    for player in players:
+        player.points = 0
+        
+    db.session.commit()
+    flash('Турнир успешно сброшен! Очки обнулены, история очищена.')
     return redirect(url_for('main.index'))
